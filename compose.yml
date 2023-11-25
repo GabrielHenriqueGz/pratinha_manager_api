@@ -1,0 +1,8 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "gab6482*222"
+      POSTGRES_DB: "pratinha_manager"
+    ports:
+      - "5432:5432"
