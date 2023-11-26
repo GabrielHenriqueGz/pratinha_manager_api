@@ -13,8 +13,8 @@ datasource db {
 model Account {
   id String @id @default(cuid())
   nickName String
-  suspTime Int @default(0)
-  active Boolean @default(true)
+  suspDays Int @default(0)
+  suspHours Int @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }

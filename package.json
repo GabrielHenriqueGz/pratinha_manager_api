@@ -25,7 +25,9 @@
   "dependencies": {
     "@prisma/client": "^5.6.0",
     "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
+    "fs": "^0.0.1-security",
     "zod": "^3.22.4"
   }
 }

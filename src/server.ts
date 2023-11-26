@@ -1,14 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import fastify from "fastify";
-import {z} from 'zod';
+import { z } from 'zod';
+import { Bot } from './bot';
 
+const discordBot = new Bot();
 const app = fastify();
 
 const prisma = new PrismaClient();
 
 app.get('/account', async () => {
     const accounts = await prisma.account.findMany();
-    return {accounts};
+    return { accounts };
 });
 
 app.get('/account/:id', async (request, reply) => {
@@ -23,8 +25,8 @@ app.get('/account/:id', async (request, reply) => {
         }
     });
 
-    if(account)
-        return {account};
+    if (account)
+        return { account };
 
     return reply.status(404).send();
 });
@@ -33,15 +35,17 @@ app.post('/account', async (request, reply) => {
 
     const createAccountSchema = z.object({
         nickName: z.string(),
-        suspTime: z.number()
+        suspDays: z.number(),
+        suspHours: z.number()
     });
 
-    const {nickName, suspTime} = createAccountSchema.parse(request.body);
-
+    const { nickName, suspDays, suspHours } = createAccountSchema.parse(request.body);
+    
     await prisma.account.create({
         data: {
             nickName,
-            suspTime
+            suspDays,
+            suspHours
         }
     });
 
@@ -60,25 +64,25 @@ app.put('/account/:id', async (request, reply) => {
         }
     });
 
-    if(!account)
+    if (!account)
         return reply.status(404).send();
 
     const updateAccountSchema = z.object({
-        suspTime: z.number()
+        suspDays: z.number()
     });
 
-    const {suspTime} = updateAccountSchema.parse(request.body);
+    const { suspDays } = updateAccountSchema.parse(request.body);
 
     await prisma.account.update({
         where: {
             id: findUniqueSchema.parse(request.params).id
         },
         data: {
-            suspTime
+            suspDays
         }
     });
 
-    return {account};
+    return { account };
 });
 
 app.delete('/account/:id', async (request, reply) => {
@@ -93,7 +97,7 @@ app.delete('/account/:id', async (request, reply) => {
         }
     });
 
-    if(!account)
+    if (!account)
         return reply.status(404).send();
 
     await prisma.account.delete({
@@ -105,6 +109,7 @@ app.delete('/account/:id', async (request, reply) => {
     return reply.status(200).send();
 });
 
+discordBot.startBot();
 app.listen({
     host: '0.0.0.0',
     port: process.env.PORT ? Number(process.env.PORT) : 8001

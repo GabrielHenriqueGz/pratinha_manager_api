@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Account" ADD COLUMN     "Teste" INTEGER NOT NULL DEFAULT 0;
