@@ -16,13 +16,15 @@ export class Account {
         let suspHours = isNumeric(hours) ? parseInt(hours) : 0;
 
         suspHours = suspHours / 24 > 1 ? 23 : suspHours;
+        const released = (!suspDays && !suspHours) ? true : false;
 
         try {
             const accountCreated = await prisma.account.create({
                 data: {
                     nickName,
                     suspDays,
-                    suspHours
+                    suspHours,
+                    released
                 }
             });
 
@@ -32,10 +34,20 @@ export class Account {
         }
     }
 
-    public async getAllAccounts() {
+    public async getAllAccounts(action: string = '') {
         try {
-            const accounts = await prisma.account.findMany();
+            
+            let accounts = null;
+
+            if(action == "updatesusp") {
+                accounts = await prisma.account.findMany({
+                    where: {released: true}
+                });
+            } else {
+                accounts = await prisma.account.findMany();
+            }
             return { accounts };
+
         } catch (error) {
             return { statusCode: 500, message: `Error: ${error}` };
         }
@@ -55,6 +67,8 @@ export class Account {
         let suspHours = isNumeric(hours) ? parseInt(hours) : 0;
 
         suspHours = suspHours / 24 > 1 ? 23 : suspHours;
+        const released = (!suspDays && !suspHours) ? true : false;
+
         try {
             const accountUpdated = await prisma.account.update({
                 where: {
@@ -63,7 +77,8 @@ export class Account {
                 data: {
                     nickName,
                     suspDays,
-                    suspHours
+                    suspHours,
+                    released
                 }
             });
 

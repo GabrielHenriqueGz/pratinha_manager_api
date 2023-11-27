@@ -83,7 +83,7 @@ async function accountsDetails() {
 
 async function selectAccount(action: string) {
 
-    const allAccounts = await accountData.getAllAccounts();
+    const allAccounts = await accountData.getAllAccounts(action);
     const data = allAccounts.accounts;
 
     if (!data || !data.length) return;
@@ -175,7 +175,7 @@ export default new Command({
                     if (rowEdit)
                         selectInteration.update({ content: "Selecione uma conta para atualizar...", components: [rowEdit] });
                     else
-                        selectInteration.update({ content: "Não há conta(s) cadastrada(s)", components: [] });
+                        selectInteration.update({ content: "Não há conta(s) cadastrada(s) ou liberada(s)", components: [] });
                     break;
                 case "deleteaccount":
                     const rowDelete = await selectAccount(opt);
