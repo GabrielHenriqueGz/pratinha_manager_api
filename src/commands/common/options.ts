@@ -155,7 +155,7 @@ export default new Command({
                         modalInteractionActive = false;
                         return;  
                     }
-
+                    modalInteractionActive = false;
                     const { fields } = modalInteraction;
                     const nick = fields.getTextInputValue("nick-name");
                     const suspDays = fields.getTextInputValue("susp-days");
@@ -199,12 +199,12 @@ export default new Command({
 
                         selectInteration.showModal(newAccountModal(nickData));
                         modalInteractionActive = true;
-                        const modalInteraction = await selectInteration.awaitModalSubmit({ time: 60_000, filter: (i: any) => i.user.id == selectInteration.user.id }).catch(() => null);
+                        const modalInteraction = await selectInteration.awaitModalSubmit({ time: 15_000, filter: (i: any) => i.user.id == selectInteration.user.id }).catch(() => null);
                         if (!modalInteraction) {
                             modalInteractionActive = false;
                             return;  
                         }
-
+                        modalInteractionActive = false;
                         const { fields } = modalInteraction;
                         const nick = fields.getTextInputValue("nick-name");
                         const suspDays = fields.getTextInputValue("susp-days");
