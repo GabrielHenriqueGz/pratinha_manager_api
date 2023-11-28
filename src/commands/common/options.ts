@@ -93,8 +93,8 @@ async function selectAccount(action: string) {
             new StringSelectMenuBuilder({
                 customId: "select-account",
                 placeholder: "Selecione uma conta...",
-                minValues: 1,
-                maxValues: 1,
+                // minValues: 1,
+                // maxValues: 1,
                 options: []
             })
         ]
@@ -102,7 +102,7 @@ async function selectAccount(action: string) {
 
     data.forEach((d:any) => {
         row.components[0].addOptions(
-            { label: `${d.nickName}`, value: `${d.id}/${action}/${d.nickName}/${d.suspendedUntil}`, emoji: `${action == 'deleteaccount' ? '❌' : '⏱️'}` },
+            { label: `${d.nickName}`, value: `${d.id}/${action}/${d.nickName}`, emoji: `${action == 'deleteaccount' ? '❌' : '⏱️'}` },
         )
     })
 
@@ -190,7 +190,7 @@ export default new Command({
                     const arrayData = opt.split("/");
 
                     if (opt.includes("/deleteaccount")) {
-                        const id = opt.substring(0, opt.indexOf('/'));
+                        const id = arrayData[0];
                         const accountDeleted = await accountData.deleteAccount(id);
                         selectInteration.update({ content: `${accountDeleted.message}`, components: [] });
                     } else if (opt.includes("/updatesusp")) {
