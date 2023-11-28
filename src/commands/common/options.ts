@@ -133,6 +133,7 @@ export default new Command({
         });
 
         const msg = await interaction.reply({
+            ephemeral: true,
             components: [row],
             fetchReply: false
         });
@@ -164,7 +165,7 @@ export default new Command({
                     const accountCreated = await accountData.createAccount(nick, suspDays, suspHours);
 
                     selectInteration.deleteReply();
-                    modalInteraction.reply({ content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
+                    modalInteraction.reply({ ephemeral: true, content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
                     break;
                 case "listaccounts":
                     const embeds = await accountsDetails();
@@ -213,7 +214,7 @@ export default new Command({
                         const accountUpdated = await accountData.updateAccount(id, nick, suspDays, suspHours);
 
                         selectInteration.deleteReply();
-                        modalInteraction.reply({ content: `Conta atualizada!\n  > ${nick}\n  > ${accountUpdated.data?.suspendedUntil ? `Suspensa até: ${accountUpdated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
+                        modalInteraction.reply({ephemeral: true, content: `Conta atualizada!\n  > ${nick}\n  > ${accountUpdated.data?.suspendedUntil ? `Suspensa até: ${accountUpdated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
                     } else {
                         selectInteration.update({ components: [] });
                     }
