@@ -1,19 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import * as utils from '../utils/utils';
+import {handleSuspensionTime} from '../utils/utils';
 
 const prisma = new PrismaClient();
-
-function handleSuspensionTime(days: string, hours: string): Date | null {
-    let suspDays = utils.isNumeric(days) ? parseInt(days) : null;
-    let suspHours = utils.isNumeric(hours) ? parseInt(hours) : null;
-    suspHours = (suspHours && suspHours / 24 > 1) ? 23 : suspHours;
-    let suspendedUntil = null;
-    if (suspDays)
-        suspendedUntil = utils.addDays(suspDays);
-    if (suspHours)
-        suspendedUntil = suspendedUntil ? utils.addHours(suspendedUntil, suspHours) : utils.addHours(new Date(), suspHours);
-    return suspendedUntil;
-}
 
 export class Account {
     constructor() { }

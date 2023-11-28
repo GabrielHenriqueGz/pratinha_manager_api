@@ -93,8 +93,6 @@ async function selectAccount(action: string) {
             new StringSelectMenuBuilder({
                 customId: "select-account",
                 placeholder: "Selecione uma conta...",
-                // minValues: 1,
-                // maxValues: 1,
                 options: []
             })
         ]

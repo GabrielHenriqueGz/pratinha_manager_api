@@ -27,4 +27,16 @@ const addHours = (date: Date, hours: number) => {
     return date;
 }
 
-export {getSuspTimeLeft, isNumeric, addDays, addHours};
+const  handleSuspensionTime = (days: string, hours: string): Date | null => {
+    let suspDays = isNumeric(days) ? parseInt(days) : null;
+    let suspHours = isNumeric(hours) ? parseInt(hours) : null;
+    suspHours = (suspHours && suspHours / 24 > 1) ? 23 : suspHours;
+    let suspendedUntil = null;
+    if (suspDays)
+        suspendedUntil = addDays(suspDays);
+    if (suspHours)
+        suspendedUntil = suspendedUntil ? addHours(suspendedUntil, suspHours) : addHours(new Date(), suspHours);
+    return suspendedUntil;
+}
+
+export {getSuspTimeLeft, isNumeric, addDays, addHours, handleSuspensionTime};
