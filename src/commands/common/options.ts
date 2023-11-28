@@ -1,6 +1,7 @@
 import { Command } from "../../structs/types/Commands";
 import { ActionRowBuilder, ApplicationCommandType, ComponentType, EmbedBuilder, ModalBuilder, StringSelectMenuBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { Account } from "../../data/account-data";
+import {getSuspTimeLeft} from '../../utils/utils';
 
 const accountData = new Account();
 
@@ -57,11 +58,10 @@ function newAccountModal(nick: any = null) {
 
     return modal;
 }
-
 async function accountsDetails() {
 
-    const allAccounts = await accountData.getAllAccounts();
-    const data = allAccounts.accounts;
+    const allAccounts = (await accountData.getAllAccounts()).data;
+    const data = allAccounts;
 
     const accountsEmbed = {
         color: 0x0099ff,
@@ -72,9 +72,10 @@ async function accountsDetails() {
     }
 
     if (data && data.length)
-        data.map(d => {
+        data.map((d:any) => {
+
             accountsEmbed.fields.push(
-                { name: `${d.suspDays || d.suspHours ? '🚫' : '✅'}  ${d.nickName}  -  ${d.suspDays || d.suspHours ? `⏱️ ${d.suspDays} dias e ${d.suspHours} horas` : 'Liberada'}`, value: `\n`, inline: false }
+                { name: `${d.suspendedUntil ? '🚫' : '✅'}  ${d.nickName}  -  ${d.suspendedUntil ? `⏱️ Suspensa até: ${d.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}`, value: `${d.suspendedUntil ? getSuspTimeLeft(d.suspendedUntil):''}`, inline: false }
             )
         });
 
@@ -83,8 +84,7 @@ async function accountsDetails() {
 
 async function selectAccount(action: string) {
 
-    const allAccounts = await accountData.getAllAccounts(action);
-    const data = allAccounts.accounts;
+    const data = (await accountData.getAllAccounts(action)).data;
 
     if (!data || !data.length) return;
 
@@ -100,9 +100,9 @@ async function selectAccount(action: string) {
         ]
     });
 
-    data.forEach(d => {
+    data.forEach((d:any) => {
         row.components[0].addOptions(
-            { label: `${d.nickName}`, value: `${d.id}/${action}/${d.nickName}/${d.suspDays}/${d.suspHours}`, emoji: `${action == 'deleteaccount' ? '❌' : '⏱️'}` },
+            { label: `${d.nickName}`, value: `${d.id}/${action}/${d.nickName}/${d.suspendedUntil}`, emoji: `${action == 'deleteaccount' ? '❌' : '⏱️'}` },
         )
     })
 
@@ -139,9 +139,9 @@ export default new Command({
 
         const collector = msg.createMessageComponentCollector({ componentType: ComponentType.StringSelect });
         collector.on("collect", async (selectInteration) => {
-            
-            if(modalInteractionActive) {
-                selectInteration.update({ content: "Aguarde...", components: []});
+
+            if (modalInteractionActive) {
+                selectInteration.update({ content: "Aguarde...", components: [] });
                 return;
             }
 
@@ -150,10 +150,10 @@ export default new Command({
                 case "newaccount":
                     selectInteration.showModal(newAccountModal());
                     modalInteractionActive = true;
-                    const modalInteraction = await selectInteration.awaitModalSubmit({ time: 15_000, filter: (i: any) => i.user.id == selectInteration.user.id}).catch(() => null);
+                    const modalInteraction = await selectInteration.awaitModalSubmit({ time: 15_000, filter: (i: any) => i.user.id == selectInteration.user.id }).catch(() => null);
                     if (!modalInteraction) {
                         modalInteractionActive = false;
-                        return;  
+                        return;
                     }
                     modalInteractionActive = false;
                     const { fields } = modalInteraction;
@@ -164,7 +164,7 @@ export default new Command({
                     const accountCreated = await accountData.createAccount(nick, suspDays, suspHours);
 
                     selectInteration.deleteReply();
-                    modalInteraction.reply({ content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspDays} dia(s)\n  > ${accountCreated.data?.suspHours} hora(s)` });
+                    modalInteraction.reply({ content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
                     break;
                 case "listaccounts":
                     const embeds = await accountsDetails();
@@ -202,7 +202,7 @@ export default new Command({
                         const modalInteraction = await selectInteration.awaitModalSubmit({ time: 15_000, filter: (i: any) => i.user.id == selectInteration.user.id }).catch(() => null);
                         if (!modalInteraction) {
                             modalInteractionActive = false;
-                            return;  
+                            return;
                         }
                         modalInteractionActive = false;
                         const { fields } = modalInteraction;
@@ -213,7 +213,7 @@ export default new Command({
                         const accountUpdated = await accountData.updateAccount(id, nick, suspDays, suspHours);
 
                         selectInteration.deleteReply();
-                        modalInteraction.reply({ content: `Conta Atualizada!\n  > ${nick}\n  > ${accountUpdated.data?.suspDays} dia(s)\n  > ${accountUpdated.data?.suspHours} hora(s)` });
+                        modalInteraction.reply({ content: `Conta atualizada!\n  > ${nick}\n  > ${accountUpdated.data?.suspendedUntil ? `Suspensa até: ${accountUpdated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
                     } else {
                         selectInteration.update({ components: [] });
                     }
