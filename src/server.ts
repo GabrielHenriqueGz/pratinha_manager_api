@@ -3,7 +3,7 @@ import Fastify from 'fastify';
 
 const app = Fastify();
 
-app.get('/', function (request, reply) {
+app.get('/ping', function (request, reply) {
     reply.send({ data: new Date() })
 });
 const discordBot = new Bot();
