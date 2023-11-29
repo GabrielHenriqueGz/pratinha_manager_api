@@ -65,7 +65,7 @@ export default new Command({
     async run({ interaction }) {
 
         if (lastInteraction) {
-            interaction.reply({ content: "Aguarde...", components: [] });
+            await interaction.reply({ content: "Aguarde...", components: [] });
             return;
         }
 
@@ -85,6 +85,6 @@ export default new Command({
 
         const accountCreated = await accountData.createAccount(nick, suspDays, suspHours);
 
-        modalInteraction.reply({ ephemeral: true, content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
+        await modalInteraction.reply({ ephemeral: true, content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}` });
     }
 });

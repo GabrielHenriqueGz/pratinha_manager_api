@@ -85,7 +85,7 @@ export default new Command({
         ["select-account-update", async (selectInteraction) => {
 
             if (lastInteraction) {
-                selectInteraction.reply({ content: "Aguarde...", components: [] });
+                await selectInteraction.reply({ content: "Aguarde...", components: [] });
                 return;
             }
 
@@ -105,7 +105,7 @@ export default new Command({
 
             const accountUpdated = (await accountData.updateAccount(id, suspDays, suspHours)).data;
 
-            modalInteraction.reply({ephemeral: true, content: `Conta atualizada!\n  > ${accountUpdated?.nickName}\n  > ${accountUpdated?.suspendedUntil ? `Suspensa até: ${accountUpdated?.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}` });
+            await modalInteraction.reply({ephemeral: true, content: `Conta atualizada!\n  > ${accountUpdated?.nickName}\n  > ${accountUpdated?.suspendedUntil ? `Suspensa até: ${accountUpdated?.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}` });
 
         }]
     ])

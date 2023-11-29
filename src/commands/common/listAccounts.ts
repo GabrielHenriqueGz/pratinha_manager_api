@@ -22,7 +22,7 @@ async function accountsDetails() {
         data.map((d:any) => {
 
             accountsEmbed.fields.push(
-                { name: `${d.suspendedUntil ? '🚫' : '✅'}  ${d.nickName}  -  ${d.suspendedUntil ? `⏱️ Suspensa até: ${d.suspendedUntil.toLocaleString('pt-br')}` : '🐒 Liberada!'}`, value: `${d.suspendedUntil ? getSuspTimeLeft(d.suspendedUntil):''}`, inline: false }
+                { name: `${d.suspendedUntil ? '🚫' : '✅'}  ${d.nickName}  -  ${d.suspendedUntil ? `⏱️ Suspensa até: ${d.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}`, value: `${d.suspendedUntil ? getSuspTimeLeft(d.suspendedUntil):''}`, inline: false }
             )
         });
 
@@ -35,6 +35,6 @@ export default new Command({
     type: ApplicationCommandType.ChatInput,
     async run({ interaction }) {
         const embeds = await accountsDetails();
-        interaction.reply({ components: [], embeds: [embeds] });
+        await interaction.reply({ components: [], embeds: [embeds] });
     }
 });

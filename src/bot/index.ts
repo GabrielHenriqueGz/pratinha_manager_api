@@ -12,7 +12,7 @@ export class Bot {
         client.on('ready', (c) => {
             console.log(`${c?.user?.username} is online!`);
         });
-        client.on('messageCreate', (message) => {
+        client.on('messageCreate', async (message) => {
             if (message.author.id == client.user?.id) return;
 
             const optionsEmbed = {
@@ -25,7 +25,7 @@ export class Bot {
                     { name: "👉 /remover", value: " * Remove uma conta.", inline: false }
                 ]
             }
-            message.reply({
+            await message.reply({
                 content: `Olá, ${message.author.username}!`, embeds: [optionsEmbed]
             });
         });
