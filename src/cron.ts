@@ -3,7 +3,7 @@ import * as https from 'https';
 
 const backendUrl = 'https://pratinha-manager-api.onrender.com/ping';
 
-const job = new cron.CronJob('*/1 * * * *', function () {
+const job = new cron.CronJob('*/10 * * * *', function () {
     console.log('Restarting Server...');
     https.
         get(backendUrl, (res:any) => {
