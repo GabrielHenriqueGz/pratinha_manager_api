@@ -24,14 +24,14 @@ export class Account {
         }
     }
 
-    public async getAllAccounts(action: string = '') {
+    public async getAllAccounts(isUpdate: boolean = false) {
         try {
 
             let accounts = null;
 
             await this.updateSuspendedAccount();
 
-            if (action == "updatesusp") {
+            if (isUpdate) {
                 accounts = await prisma.account.findMany({
                     where: { released: true }
                 });
@@ -46,7 +46,7 @@ export class Account {
         }
     }
 
-    public async updateAccount(id: string, nickName: string, days: string, hours: string) {
+    public async updateAccount(id: string, days: string, hours: string) {
         const account = await prisma.account.findUnique({
             where: {
                 id: id
@@ -64,7 +64,6 @@ export class Account {
                     id: id
                 },
                 data: {
-                    nickName,
                     suspendedUntil,
                     released: !suspendedUntil,
                     updatedAt: new Date()
