@@ -14,8 +14,19 @@ export class Bot {
         });
         client.on('messageCreate', (message) => {
             if (message.author.id == client.user?.id) return;
+
+            const optionsEmbed = {
+                color: 0x0099ff,
+                title: "Opções disponíveis:",
+                fields: [
+                    { name: "👉 /criar", value: " * Cria uma nova conta.", inline: false },
+                    { name: "👉 /listar", value: " * Lista todas as contas.", inline: false },
+                    { name: "👉 /atualizar", value: " * Atualiza a suspensão de uma conta.", inline: false },
+                    { name: "👉 /remover", value: " * Remove uma conta.", inline: false }
+                ]
+            }
             message.reply({
-                content: `Olá ${message.author.username}, digite /options para ver as opções disponíveis!`
+                content: `Olá, ${message.author.username}!`, embeds: [optionsEmbed]
             });
         });
     }
