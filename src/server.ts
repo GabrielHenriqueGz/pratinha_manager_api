@@ -1,8 +1,5 @@
 import { Bot } from './bot';
 import Fastify from 'fastify';
-import job from './cron';
-
-job.start();
 
 const app = Fastify();
 

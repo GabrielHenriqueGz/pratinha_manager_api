@@ -105,7 +105,7 @@ export default new Command({
 
             const accountUpdated = (await accountData.updateAccount(id, suspDays, suspHours)).data;
 
-            await modalInteraction.reply({ephemeral: true, content: `Conta atualizada!\n  > ${accountUpdated?.nickName}\n  > ${accountUpdated?.suspendedUntil ? `Suspensa até: ${accountUpdated?.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}` });
+            await modalInteraction.reply({content: `Conta atualizada!\n  > ${accountUpdated?.nickName}\n  > ${accountUpdated?.suspendedUntil ? `Suspensa até: ${accountUpdated?.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}` });
 
         }]
     ])

@@ -85,6 +85,6 @@ export default new Command({
 
         const accountCreated = await accountData.createAccount(nick, suspDays, suspHours);
 
-        await modalInteraction.reply({ ephemeral: true, content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}` });
+        await modalInteraction.reply({ content: `Conta cadastrada!\n  > ${nick}\n  > ${accountCreated.data?.suspendedUntil ? `Suspensa até: ${accountCreated.data?.suspendedUntil.toLocaleString('pt-BR')}` : '🐒 Liberada!'}` });
     }
 });
