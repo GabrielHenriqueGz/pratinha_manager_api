@@ -33,10 +33,11 @@ export class Account {
 
             if (isUpdate) {
                 accounts = await prisma.account.findMany({
-                    where: { released: true }
+                    where: { released: true },
+                    orderBy: {released: 'desc'}
                 });
             } else {
-                accounts = await prisma.account.findMany();
+                accounts = await prisma.account.findMany({orderBy: {released: 'desc'}});
             }
 
             return { status: 200, message: "success", data: accounts };
